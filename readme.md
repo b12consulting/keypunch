@@ -1,6 +1,6 @@
 
-Keypunch is a small client for Keycloak. It's main goal is to automate
-some administrative task like creating a user or trigger an email.
+Keypunch is a small client for Keycloak. Its main goal is to automate
+some administrative tasks like creating a user or trigger an email.
 
 
 # Install
@@ -9,6 +9,12 @@ Install latest version:
 
     pip install git+ssh://git@github.com/b12consulting/keypunch
 
+
+Install a specific version:
+
+    pip install git+ssh://git@github.com/b12consulting/keypunch@2c6496ca519
+
+The revision specified in `@..` can be replaced by a tag or a branch name.
 
 
 # Examples
