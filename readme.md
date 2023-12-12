@@ -16,6 +16,25 @@ Install a specific version:
 
 The revision specified in `@..` can be replaced by a tag or a branch name.
 
+# Testing
+
+In order to run non-mocked test you will have to start a container:
+
+    docker run --name keypunch_test --rm -p 8080:8080 \
+     -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HTTP_RELATIVE_PATH=/ \
+     quay.io/phasetwo/phasetwo-keycloak:22.0.5 \
+    start-dev --spi-email-template-provider=freemarker-plus-mustache \
+     --spi-email-template-freemarker-plus-mustache-enabled=true --spi-theme-cache-themes=false
+
+Install test dependencies
+
+
+    pip install ".[test]"
+
+Run tests
+
+    pytest tests/
+
 
 # Examples
 

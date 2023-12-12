@@ -42,7 +42,6 @@ class Endpoint:
     def get(self, **params):
         logger.debug("GET: %s", self.url)
         raw_response = self.session.get(self.url, params=params)
-        print(raw_response.content)
         return self.extract(raw_response)
 
 
