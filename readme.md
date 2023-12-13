@@ -86,7 +86,11 @@ kcli.endpoint('users', realm="django-seed").post(username="new-user")
 kcli.endpoint('orgs', realm="django-seed").get()
 
 # Members
-kcli.endpoint('members', realm="django-seed", org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c").get()
+kcli.endpoint(
+    'members',
+    realm="django-seed",
+    org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
+).get()
 
 # List Invitations
 kcli.endpoint(
