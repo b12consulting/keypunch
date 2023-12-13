@@ -67,7 +67,7 @@ pprint(kcli.endpoint('realm', name="another-new-realm").delete())
 pprint(kcli.endpoint('users', realm="django-seed").get())
 
 # Create user
-pprint(kcli.endpoint('users', realm="django-seed").post())
+pprint(kcli.endpoint('users', realm="django-seed").post(username="new-user"))
 
 # List orgs
 pprint(kcli.endpoint('orgs', realm="django-seed").get())
