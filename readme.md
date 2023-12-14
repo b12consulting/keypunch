@@ -16,6 +16,108 @@ Install a specific version:
 
 The revision specified in `@..` can be replaced by a tag or a branch name.
 
+
+# Usage
+
+## Client & endpoint
+
+The first thing to do once a client instance is created is to log in:
+
+``` python
+base_url = "http://localhost:8080"
+kcli = KClient(base_url=base_url)
+
+# Login
+kcli.login("admin", "admin")
+```
+
+The `kcli` object holds a requests session that manages the cookies,
+session refresh is not implemented so queries can fail after a few
+minutes (depending on your Keycloak settings).
+
+
+The `KClient` class main job is to instanciate an `Endpoint` object
+based on a known path. So for example in order to instanciate an
+endpoint for the "my-new-realm" realm we use the `endpoint` method
+that take as first argument the name of the endpoint and any extra
+argument needed to format the route:
+
+``` python
+ep = kcli.endpoint("realm", realm="my-new-realm")
+print(ep.url)  #'http://localhost:8080/admin/realms/my-new-realm'
+```
+
+We can then trigger the actual query with either `post`, `get`,
+`delete`, `put` or `form` (like post but with
+"application/x-www-form-urlencoded" instead of the default
+"application/json"):
+
+``` python
+realm_info = ep.get()
+```
+
+To create a new realm (note that we use the "realms" endpoint this
+time):
+
+``` python
+ep = kcli.endpoint("realms")
+ep.post(realm="another-new-realm")
+```
+
+In the example above the json payload `{"realm":"another-new-realm"}`
+will be sent in the request body.
+
+For GET queries, the method argument will be used as query parameters, so this:
+
+``` python
+kcli.endpoint("clients", realm="master").get(max=1)
+```
+
+Will query this url: `http://localhost:8080/admin/realms/master/clients?max=1`
+
+
+
+## API support
+
+The `_paths` attribute contains some pre-defined endpoints:
+
+``` python
+>>> pprint(KClient._paths)
+{
+ ...
+ 'realm': '/admin/realms/{realm}',
+ ...
+}
+ ```
+
+
+Only a few API endpoint are supported and are added in opportunistic
+fashion. You can easily add extra endpoints by updating the
+`KClient._paths` dictionary, like this:
+
+``` python
+KClient._paths.update({
+    "roles": "/admin/{realm}/clients/{id}/roles",
+    "client-scopes": "/admin//{realm}/client-scopes/{id}/scope-mappings/clients/{client}",
+    })
+```
+
+
+## Logging
+
+Enable logging
+```
+from keypunch.utils import logger
+logger.setLevel("DEBUG")
+```
+
+Alternatively you can set the environment variable:
+
+``` sh
+export KEYPUNCH_DEBUG=1
+```
+
+
 # Testing
 
 In order to run non-mocked test you will have to start a container:
@@ -38,14 +140,6 @@ Run tests
 
 # Examples
 
-``` python
-base_url = "http://localhost:8080"
-kcli = KClient(base_url=base_url)
-
-# Login
-kcli.login("admin", "admin")
-```
-
 ## Realms
 
 ``` python
@@ -53,7 +147,7 @@ kcli.login("admin", "admin")
 kcli.endpoint('realm').get()
 
 # Get app realm info
-kcli.endpoint("realm", name="django-seed").get()
+kcli.endpoint("realm", realm="my-new-realm").get()
 
 # List realms
 kcli.endpoint("realms").get()
@@ -64,7 +158,7 @@ kcli.endpoint('realms').post(
 )
 
 # Delete realms
-kcli.endpoint('realm', name="another-new-realm").delete()
+kcli.endpoint('realm', realm="another-new-realm").delete()
 ```
 
 
@@ -72,10 +166,10 @@ kcli.endpoint('realm', name="another-new-realm").delete()
 
 ``` python
 # List users
-kcli.endpoint('users', realm="django-seed").get()
+kcli.endpoint('users', realm="my-new-realm").get()
 
 # Create user
-kcli.endpoint('users', realm="django-seed").post(username="new-user")
+kcli.endpoint('users', realm="my-new-realm").post(username="new-user")
 ```
 
 
@@ -83,26 +177,26 @@ kcli.endpoint('users', realm="django-seed").post(username="new-user")
 
 ``` python
 # List orgs
-kcli.endpoint('orgs', realm="django-seed").get()
+kcli.endpoint('orgs', realm="my-new-realm").get()
 
 # Members
 kcli.endpoint(
     'members',
-    realm="django-seed",
+    realm="my-new-realm",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).get()
 
 # List Invitations
 kcli.endpoint(
     "invitations",
-    realm="django-seed",
+    realm="my-new-realm",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).get()
 
 # Create Invitations
 kcli.endpoint(
     'invitations',
-    realm="django-seed",
+    realm="my-new-realm",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).post(
     email="ham@spam.com",
@@ -112,7 +206,7 @@ kcli.endpoint(
 # Get membership info
 kcli.endpoint(
     'user',
-    realm="django-seed",
+    realm="my-new-realm",
     user_id="5db4613c-e740-4617-b86e-6830d2550590",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).get()
@@ -127,7 +221,7 @@ kcli.endpoint(
 
 kcli.endpoint(
     "reset-password",
-    realm="django-seed",
+    realm="my-new-realm",
     user_id="5db4613c-e740-4617-b86e-6830d2550590",
 ).put(
     temporary=True,
@@ -138,7 +232,7 @@ kcli.endpoint(
 # Action email with "UPDATE_PASSWORD" payload -> aka forgot password
 kcli.endpoint(
     "execute-actions-email",
-    realm="django-seed",
+    realm="my-new-realm",
     user_id="5db4613c-e740-4617-b86e-6830d2550590",
 ).put(["UPDATE_PASSWORD"])
 

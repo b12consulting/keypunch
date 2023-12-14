@@ -52,8 +52,9 @@ class KClient:
         "token": "/realms/{realm}/protocol/openid-connect/token",
         "realms": "/admin/realms",
         "realm": "/admin/realms/{realm}",
-        "user": "/admin/realms/{realm}/users/{user_id}",
         "users": "/admin/realms/{realm}/users",
+        "user": "/admin/realms/{realm}/users/{user_id}",
+        "clients": "/admin/realms/{realm}/clients",
         "reset-password": "/admin/realms/{realm}/users/{user_id}/reset-password",
         "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email",
         # Org extension
@@ -82,7 +83,6 @@ class KClient:
         }
 
     def endpoint(self, name, /, **attr):
-        # attr = {**vars(self), **attr}
         path = self._paths[name]
         url = self.base_url + path.format(**attr)
         return Endpoint(self.session, url)
