@@ -24,6 +24,8 @@ The revision specified in `@..` can be replaced by a tag or a branch name.
 The first thing to do once a client instance is created is to log in:
 
 ``` python
+from keypunch import KClient
+
 base_url = "http://localhost:8080"
 kcli = KClient(base_url=base_url)
 
@@ -37,7 +39,7 @@ minutes (depending on your Keycloak settings).
 
 
 The `KClient` class main job is to instanciate an `Endpoint` object
-based on a known path. So for example in order to instanciate an
+based on a known path. For example in order to instanciate an
 endpoint for the "my-new-realm" realm we use the `endpoint` method
 that take as first argument the name of the endpoint and any extra
 argument needed to format the route:
@@ -48,7 +50,7 @@ print(ep.url)  #'http://localhost:8080/admin/realms/my-new-realm'
 ```
 
 We can then trigger the actual query with either `post`, `get`,
-`delete`, `put` or `form` (like post but with
+`delete`, `put` or `form` (form is like post but with
 "application/x-www-form-urlencoded" instead of the default
 "application/json"):
 
