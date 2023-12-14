@@ -107,7 +107,7 @@ KClient._paths.update({
 
 Keycloak API is documented here:
 https://www.keycloak.org/docs-api/21.0.1/rest-api/index.html,
-Kecloak-orgs OpenAPI document:
+[Keycloak-orgs](https://github.com/p2-inc/keycloak-orgs) OpenAPI document:
 https://github.com/p2-inc/phasetwo-docs/blob/master/openapi.yaml
 
 
