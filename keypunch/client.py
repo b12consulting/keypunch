@@ -61,6 +61,7 @@ class KClient:
         "orgs": "/realms/{realm}/orgs",
         "members": "/realms/{realm}/orgs/{org_id}/members",
         "invitations": "/realms/{realm}/orgs/{org_id}/invitations",
+        "role-users": "/realms/{realm}/orgs/{org_id}/roles/{role}/users",
     }
 
     def __init__(self, base_url, realm=DEFAULT_REALM):
@@ -69,7 +70,8 @@ class KClient:
         self.session = requests.Session()
         self.access_token = None
 
-    def login(self, username, password, realm=DEFAULT_REALM):
+    def login(self, username, password, realm=None):
+        realm = realm or self.realm
         data = {
             "client_id": "admin-cli",
             "username": username,

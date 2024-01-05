@@ -31,6 +31,15 @@ kcli = KClient(base_url=base_url)
 
 # Login
 kcli.login("admin", "admin")
+
+# Login with another user
+base_url = "http://localhost:8080"
+kcli = KClient(base_url=base_url, realm="custom-realm")
+kcli.login(
+    "org-admin-123-abcd@noreply.phasetwo.io",
+    "passwd",
+)
+
 ```
 
 The `kcli` object holds a requests session that manages the cookies,
@@ -218,6 +227,17 @@ kcli.endpoint(
     user_id="5db4613c-e740-4617-b86e-6830d2550590",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).get()
+
+# Get user for a given org role in a realm
+
+kcli.endpoint(
+    'role-users',
+    realm="gpc_analysis",
+    org_id="e397aff2-1b0f-43b8-8305-5b94b9fc853b",
+    role="manage-members",
+).get()
+
+
 ```
 
 
