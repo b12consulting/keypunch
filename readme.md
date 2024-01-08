@@ -124,7 +124,7 @@ https://github.com/p2-inc/phasetwo-docs/blob/master/openapi.yaml
 ## Logging
 
 Enable logging
-```
+``` python
 from keypunch.utils import logger
 logger.setLevel("DEBUG")
 ```
@@ -235,12 +235,12 @@ kcli.endpoint(
 ).get()
 
 # Delete
-    kclient.endpoint(
-            'invitation',
-        realm="test-realm",
-        org_id=org_id,
-        invitation_id=invitation[0]["id"],
-    ).delete()
+kclient.endpoint(
+        'invitation',
+    realm="test-realm",
+    org_id=org_id,
+    invitation_id=invitation[0]["id"],
+).delete()
 ```
 
 
