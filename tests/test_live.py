@@ -7,27 +7,27 @@ def test_invite_user():
     kclient.login("admin", "admin")
 
     # List realms
-    realms = kclient.endpoint('realms').get()
+    realms = kclient.endpoint("realms").get()
     test_realm = [r for r in realms if r["realm"] == "test-realm"]
     if test_realm:
         # Delete realm
-        kclient.endpoint('realm', realm="test-realm").delete()
+        kclient.endpoint("realm", realm="test-realm").delete()
 
     # Create realm
-    kclient.endpoint('realms').post(realm="test-realm")
+    kclient.endpoint("realms").post(realm="test-realm")
 
     # Read it back
-    res = kclient.endpoint('realms').get()
+    res = kclient.endpoint("realms").get()
     assert "test-realm" in [r["realm"] for r in res]
 
     # Create user
-    kclient.endpoint('users', realm="test-realm").post(
+    kclient.endpoint("users", realm="test-realm").post(
         username="new-user",
         email="new-user@example.com",
     )
 
     # Read it back
-    res = kclient.endpoint('users', realm="test-realm").get()
+    res = kclient.endpoint("users", realm="test-realm").get()
     assert "new-user" in [u["username"] for u in res]
 
     # List orgs
@@ -36,16 +36,16 @@ def test_invite_user():
     if test_org:
         org_id = test_org[0]["id"]
         # Delete test org
-        kclient.endpoint('org', org_id=org_id).delete()
+        kclient.endpoint("org", org_id=org_id).delete()
 
     # Create test org
-    kclient.endpoint('orgs', realm="test-realm").post(name="test-org")
+    kclient.endpoint("orgs", realm="test-realm").post(name="test-org")
     orgs = kclient.endpoint("orgs", realm="test-realm").get()
-    org_id, =  [o["id"] for o in orgs if o["name"] == "test-org"]
+    (org_id,) = [o["id"] for o in orgs if o["name"] == "test-org"]
 
     # List invitations
     invitations = kclient.endpoint(
-        'invitations',
+        "invitations",
         realm="test-realm",
         org_id=org_id,
     ).get()
@@ -53,7 +53,7 @@ def test_invite_user():
     # Delete pending invitation
     for invitation in invitations:
         kclient.endpoint(
-            'invitation',
+            "invitation",
             realm="test-realm",
             org_id=org_id,
             invitation=invitation["id"],
@@ -61,14 +61,14 @@ def test_invite_user():
 
     # Create invitation
     kclient.endpoint(
-        'invitations',
+        "invitations",
         realm="test-realm",
         org_id=org_id,
     ).post(email="new-user@example.com", send=True)
 
     # List invitations
     res = kclient.endpoint(
-        'invitations',
+        "invitations",
         realm="test-realm",
         org_id=org_id,
     ).get()
@@ -77,7 +77,7 @@ def test_invite_user():
 
     # Delete it
     kclient.endpoint(
-            'invitation',
+        "invitation",
         realm="test-realm",
         org_id=org_id,
         invitation_id=invitation[0]["id"],
