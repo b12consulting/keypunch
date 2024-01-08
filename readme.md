@@ -115,8 +115,9 @@ KClient._paths.update({
 
 
 Keycloak API is documented here:
-https://www.keycloak.org/docs-api/21.0.1/rest-api/index.html,
-[Keycloak-orgs](https://github.com/p2-inc/keycloak-orgs) OpenAPI document:
+https://www.keycloak.org/docs-api/23.0.3/rest-api/index.html ,
+[Keycloak-orgs](https://github.com/p2-inc/keycloak-orgs) OpenAPI
+document:
 https://github.com/p2-inc/phasetwo-docs/blob/master/openapi.yaml
 
 
@@ -190,26 +191,32 @@ kcli.endpoint('users', realm="my-new-realm").post(username="new-user")
 ```
 
 
-## Organisations
+## Organisation membership
 
 ``` python
 # List orgs
 kcli.endpoint('orgs', realm="my-new-realm").get()
 
-# Members
+# List members
 kcli.endpoint(
     'members',
     realm="my-new-realm",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).get()
 
-# List Invitations
+# Get membership info
 kcli.endpoint(
-    "invitations",
+    'user',
     realm="my-new-realm",
+    user_id="5db4613c-e740-4617-b86e-6830d2550590",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).get()
+```
 
+
+## Organisation invitations
+
+``` python
 # Create Invitations
 kcli.endpoint(
     'invitations',
@@ -220,16 +227,27 @@ kcli.endpoint(
     send=True,
 )
 
-# Get membership info
+# List Invitations
 kcli.endpoint(
-    'user',
+    "invitations",
     realm="my-new-realm",
-    user_id="5db4613c-e740-4617-b86e-6830d2550590",
     org_id="c501122a-e007-46d0-b620-cdcc2aa13f4c",
 ).get()
 
-# Get user for a given org role in a realm
+# Delete
+    kclient.endpoint(
+            'invitation',
+        realm="test-realm",
+        org_id=org_id,
+        invitation_id=invitation[0]["id"],
+    ).delete()
+```
 
+
+## Organisation roles
+
+``` python
+# Get user for a given org role in a realm
 kcli.endpoint(
     'role-users',
     realm="gpc_analysis",
@@ -244,6 +262,14 @@ kcli.endpoint(
 ## Trigger mails
 
 ``` python
+
+# Action email with "UPDATE_PASSWORD" payload -> can be used as forgot password or for first login
+kcli.endpoint(
+    "execute-actions-email",
+    realm="my-new-realm",
+    user_id="5db4613c-e740-4617-b86e-6830d2550590",
+).put(["UPDATE_PASSWORD"])
+
 # Force user to cycle password (so not a situation were the user
 # has forgot it)
 
@@ -256,12 +282,4 @@ kcli.endpoint(
     type="password",
     value="hamspam",
 )
-
-# Action email with "UPDATE_PASSWORD" payload -> aka forgot password
-kcli.endpoint(
-    "execute-actions-email",
-    realm="my-new-realm",
-    user_id="5db4613c-e740-4617-b86e-6830d2550590",
-).put(["UPDATE_PASSWORD"])
-
 ```

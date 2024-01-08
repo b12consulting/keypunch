@@ -59,8 +59,10 @@ class KClient:
         "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email",
         # Org extension
         "orgs": "/realms/{realm}/orgs",
+        "org": "/realms/{realm}/orgs/{org_id}",
         "members": "/realms/{realm}/orgs/{org_id}/members",
         "invitations": "/realms/{realm}/orgs/{org_id}/invitations",
+        "invitation": "/realms/{realm}/orgs/{org_id}/invitations/{invitation_id}",
         "role-users": "/realms/{realm}/orgs/{org_id}/roles/{role}/users",
     }
 
