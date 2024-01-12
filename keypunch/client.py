@@ -25,7 +25,6 @@ class Endpoint:
         return self.extract(raw_response)
 
     def post(self, json_payload=None, /, **json):
-        json = json_payload or json
         logger.debug("POST: %s", self.url)
         raw_response = self.session.post(self.url, json=json, data=json_payload)
         return self.extract(raw_response)
