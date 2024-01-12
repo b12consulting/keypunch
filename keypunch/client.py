@@ -25,6 +25,7 @@ class Endpoint:
         return self.extract(raw_response)
 
     def post(self, json_payload=None, /, **json):
+        json = json_payload or json
         logger.debug("POST: %s", self.url)
         raw_response = self.session.post(self.url, json=json)
         return self.extract(raw_response)
@@ -46,7 +47,6 @@ class Endpoint:
 
 
 class KClient:
-
     _paths = {
         # Base keycloak
         "token": "/realms/{realm}/protocol/openid-connect/token",
@@ -61,9 +61,14 @@ class KClient:
         "orgs": "/realms/{realm}/orgs",
         "org": "/realms/{realm}/orgs/{org_id}",
         "members": "/realms/{realm}/orgs/{org_id}/members",
+        "member": "/realms/{realm}/orgs/{org_id}/members/{user_id}",
         "invitations": "/realms/{realm}/orgs/{org_id}/invitations",
         "invitation": "/realms/{realm}/orgs/{org_id}/invitations/{invitation_id}",
         "role-users": "/realms/{realm}/orgs/{org_id}/roles/{role}/users",
+        "user-orgs": "/realms/{realm}/users/{user_id}/orgs",
+        "roles": "/admin/realms/{realm}/clients/{client_id}/roles",
+        "role-mappings-user-realm": "/admin/realms/{realm}/users/{user_id}/role-mappings/realm",
+        "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
     }
 
     def __init__(self, base_url, realm=DEFAULT_REALM):
