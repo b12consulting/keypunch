@@ -57,6 +57,9 @@ class KClient:
         "clients": "/admin/realms/{realm}/clients",
         "reset-password": "/admin/realms/{realm}/users/{user_id}/reset-password",
         "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email",
+        "roles": "/admin/realms/{realm}/clients/{client_id}/roles",
+        "role-mappings-user-realm": "/admin/realms/{realm}/users/{user_id}/role-mappings/realm",
+        "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
         # Org extension
         "orgs": "/realms/{realm}/orgs",
         "org": "/realms/{realm}/orgs/{org_id}",
@@ -66,9 +69,6 @@ class KClient:
         "invitation": "/realms/{realm}/orgs/{org_id}/invitations/{invitation_id}",
         "role-users": "/realms/{realm}/orgs/{org_id}/roles/{role}/users",
         "user-orgs": "/realms/{realm}/users/{user_id}/orgs",
-        "roles": "/admin/realms/{realm}/clients/{client_id}/roles",
-        "role-mappings-user-realm": "/admin/realms/{realm}/users/{user_id}/role-mappings/realm",
-        "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
     }
 
     def __init__(self, base_url, realm=DEFAULT_REALM):
