@@ -52,12 +52,6 @@ class Endpoint:
         raw_response = self.session.delete(self.url, params=params, json=self._json)
         return self.extract(raw_response)
 
-    def delete_with_payload(self, json_payload=None, /, **json):
-        json = json_payload or json
-        logger.debug("DELETE: %s (payload: %s)", self.url, json)
-        raw_response = self.session.request("DELETE", self.url, json=json)
-        return self.extract(raw_response)
-
     def get(self, **params):
         logger.debug("GET: %s", self.url)
         params = params or self._params
@@ -91,7 +85,7 @@ class KClient:
         "role-mappings": "/admin/realms/{realm}/users/{user_id}/role-mappings",
         "role-mappings-user-realm": "/admin/realms/{realm}/users/{user_id}/role-mappings/realm",
         "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
-        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}",
+        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}", # idealy lifespan should be passed as params but we enforce it here
         # Org extension
         "orgs": "/realms/{realm}/orgs",
         "org": "/realms/{realm}/orgs/{org_id}",
