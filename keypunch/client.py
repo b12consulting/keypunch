@@ -40,6 +40,12 @@ class Endpoint:
         raw_response = self.session.delete(self.url, params=params)
         return self.extract(raw_response)
 
+    def delete_with_payload(self, json_payload=None, /, **json):
+        json = json_payload or json
+        logger.debug("DELETE: %s (payload: %s)", self.url, json)
+        raw_response = self.session.request("DELETE", self.url, json=json)
+        return self.extract(raw_response)
+
     def get(self, **params):
         logger.debug("GET: %s", self.url)
         raw_response = self.session.get(self.url, params=params)
@@ -58,6 +64,7 @@ class KClient:
         "reset-password": "/admin/realms/{realm}/users/{user_id}/reset-password",
         "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email",
         "roles": "/admin/realms/{realm}/clients/{client_id}/roles",
+        "role-mappings": "/admin/realms/{realm}/users/{user_id}/role-mappings",
         "role-mappings-user-realm": "/admin/realms/{realm}/users/{user_id}/role-mappings/realm",
         "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
         # Org extension
