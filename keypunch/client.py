@@ -72,7 +72,6 @@ class Endpoint:
 
 
 class KClient:
-
     _paths = {
         # Base keycloak
         "token": "/realms/{realm}/protocol/openid-connect/token",
@@ -82,7 +81,11 @@ class KClient:
         "user": "/admin/realms/{realm}/users/{user_id}",
         "clients": "/admin/realms/{realm}/clients",
         "reset-password": "/admin/realms/{realm}/users/{user_id}/reset-password",
-        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}",
+        "roles": "/admin/realms/{realm}/clients/{client_id}/roles",
+        "role-mappings": "/admin/realms/{realm}/users/{user_id}/role-mappings",
+        "role-mappings-user-realm": "/admin/realms/{realm}/users/{user_id}/role-mappings/realm",
+        "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
+        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}", # idealy lifespan should be passed as params but we enforce it here
         # Org extension
         "orgs": "/realms/{realm}/orgs",
         "org": "/realms/{realm}/orgs/{org_id}",
@@ -91,6 +94,7 @@ class KClient:
         "invitations": "/realms/{realm}/orgs/{org_id}/invitations",
         "invitation": "/realms/{realm}/orgs/{org_id}/invitations/{invitation_id}",
         "role-users": "/realms/{realm}/orgs/{org_id}/roles/{role}/users",
+        "user-orgs": "/realms/{realm}/users/{user_id}/orgs",
     }
 
     def __init__(self, base_url, realm=DEFAULT_REALM):
