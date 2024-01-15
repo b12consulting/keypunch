@@ -23,13 +23,14 @@ def test_get_other_realm(kclient):
         "execute-actions-email",
         realm="test-realm",
         user_id="5db4613c-e740-4617-b86e-6830d2550590",
+        lifespan=43200,
     )
-    ep.put(["UPDATE_PASSWORD"])
+    ep.json(["UPDATE_PASSWORD"]).put()
     assert (
         ep.url
-        == "http://localhost:8080/admin/realms/test-realm/users/5db4613c-e740-4617-b86e-6830d2550590/execute-actions-email"
+        == "http://localhost:8080/admin/realms/test-realm/users/5db4613c-e740-4617-b86e-6830d2550590/execute-actions-email?lifespan=43200"
     )
-    Endpoint.put.assert_called_once_with(["UPDATE_PASSWORD"])
+    Endpoint.put.assert_called_once()
 
 
 def test_create_realm(kclient):

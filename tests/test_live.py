@@ -1,3 +1,5 @@
+import pytest
+
 from keypunch import KClient
 
 
@@ -24,11 +26,21 @@ def test_invite_user():
     kclient.endpoint("users", realm="test-realm").post(
         username="new-user",
         email="new-user@example.com",
+        enabled=True,
     )
 
     # Read it back
     res = kclient.endpoint("users", realm="test-realm").get()
     assert "new-user" in [u["username"] for u in res]
+
+    # Email user
+    uid, = [u["id"] for u in res if u["username"] == "new-user"]
+    kclient.endpoint(
+        "execute-actions-email",
+        realm="test-realm",
+        user_id=uid,
+        lifespan=43200,
+    ).json(["UPDATE_PASSWORD"]).put()
 
     # List orgs
     orgs = kclient.endpoint("orgs", realm="test-realm").get()
@@ -82,3 +94,10 @@ def test_invite_user():
         org_id=org_id,
         invitation_id=invitation[0]["id"],
     ).delete()
+
+
+def test_exception():
+    base_url = "http://localhost:8080"
+    kclient = KClient(base_url=base_url)
+    with pytest.raises(Exception):
+        kclient.login("admin", "INCORRECT-PWD")
