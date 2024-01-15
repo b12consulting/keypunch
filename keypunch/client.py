@@ -12,37 +12,63 @@ class Endpoint:
     def __init__(self, session, url):
         self.session = session
         self.url = url
+        self._data = None
+        self._json = None
+        self._params = None
 
     @staticmethod
     def extract(raw_response):
-        raw_response.raise_for_status()
+        try:
+            raw_response.raise_for_status()
+        except Exception as e :
+            msg = "Received unexpected status (%s) \n %s \n Server response: %s"
+            logger.exception(msg, raw_response.status_code, str(e), raw_response.content)
+            raise # Bubble-up
+
         response = raw_response.json() if raw_response.content else {}  # ?
         return response
 
     def form(self, **data):
         logger.debug("POST (url-encoded): %s", self.url)
+        data = data or self._data
         raw_response = self.session.post(self.url, data=data)
         return self.extract(raw_response)
 
-    def post(self, json_payload=None, /, **json):
+    def post(self, **json):
         logger.debug("POST: %s", self.url)
+        json = json or self._json
         raw_response = self.session.post(self.url, json=json)
         return self.extract(raw_response)
 
-    def put(self, json_payload=None, /, **json):
-        json = json_payload or json
+    def put(self, **json):
         logger.debug("PUT: %s (payload: %s)", self.url, json)
+        json = json or self._json
         raw_response = self.session.put(self.url, json=json)
         return self.extract(raw_response)
 
     def delete(self, **params):
-        raw_response = self.session.delete(self.url, params=params)
+        logger.debug("DELETE: %s", self.url)
+        params = params or self._params
+        raw_response = self.session.delete(self.url, params=params, json=self._json)
         return self.extract(raw_response)
 
     def get(self, **params):
         logger.debug("GET: %s", self.url)
+        params = params or self._params
         raw_response = self.session.get(self.url, params=params)
         return self.extract(raw_response)
+
+    def json(self, values):
+        self._json = values
+        return self
+
+    def data(self, values):
+        self._data = values
+        return self
+
+    def params(self, values):
+        self._params = values
+        return self
 
 
 class KClient:
@@ -56,11 +82,12 @@ class KClient:
         "user": "/admin/realms/{realm}/users/{user_id}",
         "clients": "/admin/realms/{realm}/clients",
         "reset-password": "/admin/realms/{realm}/users/{user_id}/reset-password",
-        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email",
+        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}",
         # Org extension
         "orgs": "/realms/{realm}/orgs",
         "org": "/realms/{realm}/orgs/{org_id}",
         "members": "/realms/{realm}/orgs/{org_id}/members",
+        "member": "/realms/{realm}/orgs/{org_id}/members/{user_id}",
         "invitations": "/realms/{realm}/orgs/{org_id}/invitations",
         "invitation": "/realms/{realm}/orgs/{org_id}/invitations/{invitation_id}",
         "role-users": "/realms/{realm}/orgs/{org_id}/roles/{role}/users",
