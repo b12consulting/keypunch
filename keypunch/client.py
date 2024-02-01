@@ -85,7 +85,8 @@ class KClient:
         "role-mappings": "/admin/realms/{realm}/users/{user_id}/role-mappings",
         "role-mappings-user-realm": "/admin/realms/{realm}/users/{user_id}/role-mappings/realm",
         "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
-        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}", # idealy lifespan should be passed as params but we enforce it here
+        "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}",  # idealy lifespan should be passed as params but we enforce it here
+        "logout": "/admin/realms/{realm}/users/{id}/logout",
         # Org extension
         "orgs": "/realms/{realm}/orgs",
         "org": "/realms/{realm}/orgs/{org_id}",
