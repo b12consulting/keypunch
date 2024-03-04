@@ -20,10 +20,12 @@ class Endpoint:
     def extract(raw_response):
         try:
             raw_response.raise_for_status()
-        except Exception as e :
+        except Exception as e:
             msg = "Received unexpected status (%s) \n %s \n Server response: %s"
-            logger.exception(msg, raw_response.status_code, str(e), raw_response.content)
-            raise # Bubble-up
+            logger.exception(
+                msg, raw_response.status_code, str(e), raw_response.content
+            )
+            raise  # Bubble-up
 
         response = raw_response.json() if raw_response.content else {}  # ?
         return response
@@ -87,6 +89,8 @@ class KClient:
         "role-mappings-user-client": "/admin/realms/{realm}/users/{user_id}/role-mappings/clients/{client_id}",
         "execute-actions-email": "/admin/realms/{realm}/users/{user_id}/execute-actions-email?lifespan={lifespan}",  # idealy lifespan should be passed as params but we enforce it here
         "logout": "/admin/realms/{realm}/users/{id}/logout",
+        "credentials": "/admin/realms/{realm}/users/{user_id}/credentials",
+        "credential": "/admin/realms/{realm}/users/{user_id}/credentials/{credential_id}",
         # Org extension
         "orgs": "/realms/{realm}/orgs",
         "org": "/realms/{realm}/orgs/{org_id}",
